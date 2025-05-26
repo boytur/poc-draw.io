@@ -32,7 +32,7 @@ function App() {
         <iframe
           ref={iframeRef}
           id="drawioFrame"
-          src="https://embed.diagrams.net/?embed=1&proto=json&ui=system"
+          src="https://embed.diagrams.net/?embed=1&proto=json&ui=system&modified=0"
           width="1000"
           height="600"
           title="Draw.io Editor"
