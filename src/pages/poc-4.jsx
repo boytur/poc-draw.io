@@ -6,6 +6,8 @@ function Poc4() {
 
     useEffect(() => {
         const handleMessage = (event) => {
+
+            console.log('[📥 Message Received]', event.data);
             try {
                 const msg = JSON.parse(event.data);
 
@@ -108,16 +110,25 @@ function Poc4() {
                 <button onClick={loadFromLocalStorage} style={{ marginBottom: '10px' }}>
                     Load from localStorage
                 </button>
+                <button onClick={() => {
+                    iframeRef.current.contentWindow.postMessage(
+                        JSON.stringify({ action: 'template' }),
+                        '*'
+                    );
+                }}>
+                    🆕 New Diagram
+                </button>
 
                 <iframe
                     ref={iframeRef}
                     id="drawioFrame"
-                    src="https://embed.diagrams.net/?embed=1&proto=json&ui=light&spin=1"
+                    src="https://embed.diagrams.net/?embed=1&proto=json&ui=light&libraries=1&nav=1&toolbar=1&zoom=1&layers=1&pages=1&math=1&dark=0&saveAndExit=0&noSaveBtn=0&noExitBtn=1"
                     width="1000"
                     height="600"
                     title="Draw.io Editor"
                     style={{ border: '1px solid #ccc', borderRadius: '8px' }}
                 />
+
             </header>
         </div>
     );
