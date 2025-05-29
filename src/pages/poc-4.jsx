@@ -29,7 +29,7 @@ function Poc4() {
                             '*'
                         );
                     } else {
-                        // ✅ ถ้ายังไม่มี → สร้าง diagram ว่างใหม่
+                        //  ถ้ายังไม่มี → สร้าง diagram ว่างใหม่
                         iframeRef.current.contentWindow.postMessage(
                             JSON.stringify({
                                 action: 'load',
@@ -37,7 +37,7 @@ function Poc4() {
                                 title: 'New Project',
                                 modified: false,
                             }),
-                            '*'
+                            'https://embed.diagrams.net'
                         );
                     }
                 }
@@ -48,6 +48,29 @@ function Poc4() {
                     console.log('✅ Diagram saved to localStorage');
                     alert('Diagram saved to localStorage!');
                 }
+
+                if (msg.event === 'export') {
+                    const base64Data = msg.data.startsWith('data:image/png;base64,')
+                        ? msg.data.split(',')[1] // ถ้ามี prefix ให้ตัดออก
+                        : msg.data;
+
+                    const byteCharacters = atob(base64Data);
+                    const byteNumbers = new Array(byteCharacters.length);
+                    for (let i = 0; i < byteCharacters.length; i++) {
+                        byteNumbers[i] = byteCharacters.charCodeAt(i);
+                    }
+                    const byteArray = new Uint8Array(byteNumbers);
+                    const blob = new Blob([byteArray], { type: 'image/png' });
+
+                    const url = URL.createObjectURL(blob);
+                    const a = document.createElement('a');
+                    a.href = url;
+                    a.download = 'diagram.png';
+                    a.click();
+                    URL.revokeObjectURL(url);
+                }
+
+                
             } catch (err) {
                 // ignore
             }
@@ -74,7 +97,7 @@ function Poc4() {
                     autosave: 1,
                     saveAndExit: 0,
                 }),
-                '*'
+                'https://embed.diagrams.net'
             );
         };
         reader.readAsText(file);
@@ -90,7 +113,7 @@ function Poc4() {
                     title: 'Loaded from localStorage',
                     modified: false,
                 }),
-                '*'
+                'https://embed.diagrams.net'
             );
         }
     };
@@ -117,6 +140,15 @@ function Poc4() {
                     );
                 }}>
                     🆕 New Diagram
+                </button>
+
+                <button onClick={() => {
+                    iframeRef.current.contentWindow.postMessage(
+                        JSON.stringify({ action: 'export', format: 'png', xml: 1, transparent: 0 }),
+                        'https://embed.diagrams.net'
+                    );
+                }}>
+                    📤 Export PNG
                 </button>
 
                 <iframe
