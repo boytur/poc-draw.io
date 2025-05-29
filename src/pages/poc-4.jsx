@@ -7,12 +7,12 @@ function Poc4() {
     useEffect(() => {
         const handleMessage = (event) => {
 
-            console.log('[📥 Message Received]', event.data);
+            console.log('[ Message Received]', event.data);
             try {
                 const msg = JSON.parse(event.data);
 
                 if (msg.event === 'init' && !hasLoaded.current) {
-                    console.log('[📥 Ready] Draw.io is ready to receive content.');
+                    console.log('[ Ready] Draw.io is ready to receive content.');
                     hasLoaded.current = true;
 
                     const saved = localStorage.getItem('myDiagram');
@@ -45,7 +45,7 @@ function Poc4() {
                 if (msg.event === 'save') {
                     const xml = msg.xml;
                     localStorage.setItem('myDiagram', xml);
-                    console.log('✅ Diagram saved to localStorage');
+                    console.log(' Diagram saved to localStorage');
                     alert('Diagram saved to localStorage!');
                 }
 
